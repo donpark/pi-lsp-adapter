@@ -68,6 +68,35 @@ describe("detectRoot", () => {
     expect(root?.rootDir).toBe(tempRoot);
   });
 
+  it("matches wildcard markers like *.xcodeproj over repository .git", async () => {
+    const tempRoot = await mkdtemp(join(tmpdir(), "pi-lsp-root-"));
+    tempDirs.push(tempRoot);
+
+    await mkdir(join(tempRoot, ".git"), { recursive: true });
+    await mkdir(join(tempRoot, "ios", "App.xcodeproj"), { recursive: true });
+    await mkdir(join(tempRoot, "ios", "App"), { recursive: true });
+    await writeFile(join(tempRoot, "ios", "App", "Main.swift"), "\n", "utf8");
+
+    const root = await detectRoot(join(tempRoot, "ios", "App", "Main.swift"), ["Package.swift", "*.xcodeproj", ".git"]);
+
+    expect(root?.marker).toBe("*.xcodeproj");
+    expect(root?.rootDir).toBe(join(tempRoot, "ios"));
+  });
+
+  it("falls through a wildcard marker that matches nothing", async () => {
+    const tempRoot = await mkdtemp(join(tmpdir(), "pi-lsp-root-"));
+    tempDirs.push(tempRoot);
+
+    await mkdir(join(tempRoot, ".git"), { recursive: true });
+    await mkdir(join(tempRoot, "ios"), { recursive: true });
+    await writeFile(join(tempRoot, "ios", "Main.swift"), "\n", "utf8");
+
+    const root = await detectRoot(join(tempRoot, "ios", "Main.swift"), ["*.xcodeproj", ".git"]);
+
+    expect(root?.marker).toBe(".git");
+    expect(root?.rootDir).toBe(tempRoot);
+  });
+
   it("returns undefined when no marker matches", async () => {
     const root = await detectRoot(join(repo, "apps/web/src/app.ts"), ["missing.marker"]);
     expect(root).toBeUndefined();
