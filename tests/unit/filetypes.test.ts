@@ -15,6 +15,9 @@ describe("detectFiletype", () => {
     ["package.json", "json"],
     ["settings.jsonc", "jsonc"],
     ["Main.java", "java"],
+    ["ChatViewController.swift", "swift"],
+    ["build.zig", "zig"],
+    ["build.zig.zon", "zon"],
   ])("maps %s to %s", (path, expected) => {
     expect(detectFiletype({ path })).toBe(expected);
   });

@@ -15,6 +15,9 @@ export const BUILTIN_FILETYPE_RULES: Required<FiletypeRules> = {
     ".json": "json",
     ".jsonc": "jsonc",
     ".java": "java",
+    ".swift": "swift",
+    ".zig": "zig",
+    ".zon": "zon",
   },
 };
 
