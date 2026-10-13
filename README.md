@@ -111,21 +111,23 @@ Line and column inputs are 1-based. For hover, definitions, and references, put 
 
 ## Supported servers
 
-Built-in catalog entries currently include:
+Supported languages/filetypes, and where to get a server for each:
 
-| Server          | Languages/filetypes              | Managed installer |
-| --------------- | -------------------------------- | ----------------- |
-| `vtsls`         | JavaScript, JSX, TypeScript, TSX | npm               |
-| `pyright`       | Python                           | npm               |
-| `gopls`         | Go                               | go                |
-| `rust-analyzer` | Rust                             | GitHub release    |
-| `yamlls`        | YAML                             | npm               |
-| `jsonls`        | JSON, JSONC                      | npm               |
-| `jdtls`         | Java                             | GitHub release    |
+| Server                   | Languages/filetypes              | Managed installer     |
+| ------------------------ | -------------------------------- | --------------------- |
+| `vtsls`                  | JavaScript, JSX, TypeScript, TSX | npm                   |
+| `pyright`                | Python                           | npm                   |
+| `gopls`                  | Go                               | go                    |
+| `rust-analyzer`          | Rust                             | GitHub release        |
+| `yamlls`                 | YAML                             | npm                   |
+| `jsonls`                 | JSON, JSONC                      | npm                   |
+| `jdtls`                  | Java                             | GitHub release        |
+| `sourcekit-lsp` (config) | Swift                            | none — bring your own |
+| `zls` (config)           | Zig, Zon                         | none — bring your own |
+
+The first seven are built-in catalog entries: `/lsp install <serverId>` installs them. The last two are bring-your-own: filetype detection covers Swift (`.swift`), Zig (`.zig`), and Zig package manifests (`.zon`), but there is no built-in catalog entry or managed installer, so define the server yourself in config (see the `sourcekit-lsp` snippet below).
 
 You can override these definitions or add new server definitions in config.
-
-Filetype detection also recognizes Swift (`.swift`), Zig (`.zig`), and Zig package manifests (`.zon`). Those filetypes have no built-in catalog entry yet, but any server you configure yourself (for example `sourcekit-lsp` or `zls`) can handle them.
 
 ## Configuration
 
