@@ -125,6 +125,8 @@ Built-in catalog entries currently include:
 
 You can override these definitions or add new server definitions in config.
 
+Filetype detection also recognizes Swift (`.swift`), Zig (`.zig`), and Zig package manifests (`.zon`). Those filetypes have no built-in catalog entry yet, but any server you configure yourself (for example `sourcekit-lsp` or `zls`) can handle them.
+
 ## Configuration
 
 Most users only need one file:
@@ -207,6 +209,21 @@ Auto-install missing servers on first explicit LSP tool use:
 }
 ```
 
+Root a Swift project at its Xcode project instead of the repository root:
+
+```json
+{
+  "servers": {
+    "sourcekit-lsp": {
+      "filetypes": ["swift"],
+      "rootMarkers": ["*.xcodeproj", ".git"]
+    }
+  }
+}
+```
+
+Wildcard root markers matter here: without `*.xcodeproj` matching, `sourcekit-lsp` is rooted at the repository and falls back to syntactic-only mode. Markers are checked in order, and literal segments keep literal matching.
+
 Tune Pyright analysis from project config without changing executables:
 
 ```json
@@ -229,18 +246,18 @@ Tune Pyright analysis from project config without changing executables:
 
 A server definition can include:
 
-| Field                   | Description                                                 |
-| ----------------------- | ----------------------------------------------------------- |
-| `displayName`           | Human-readable name shown in status output                  |
-| `filetypes`             | Filetypes handled by the server                             |
-| `rootMarkers`           | Files/directories used to detect the project root           |
-| `install`               | Managed install spec: `npm`, `go`, `github`, or `system`    |
-| `command`               | Command used to start the language server                   |
-| `cwd`                   | Working directory for the server command                    |
-| `env`                   | Environment overrides; supports `$env:VAR` references       |
-| `settings`              | LSP settings returned through `workspace/configuration`     |
-| `initializationOptions` | LSP initialization options                                  |
-| `lazy`                  | Whether the server should avoid session-start eager startup |
+| Field                   | Description                                                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `displayName`           | Human-readable name shown in status output                                                                           |
+| `filetypes`             | Filetypes handled by the server                                                                                      |
+| `rootMarkers`           | Files/directories used to detect the project root; `*` wildcards are supported in path segments (e.g. `*.xcodeproj`) |
+| `install`               | Managed install spec: `npm`, `go`, `github`, or `system`                                                             |
+| `command`               | Command used to start the language server                                                                            |
+| `cwd`                   | Working directory for the server command                                                                             |
+| `env`                   | Environment overrides; supports `$env:VAR` references                                                                |
+| `settings`              | LSP settings returned through `workspace/configuration`                                                              |
+| `initializationOptions` | LSP initialization options                                                                                           |
+| `lazy`                  | Whether the server should avoid session-start eager startup                                                          |
 
 `command` supports placeholders such as `{installBin}`, `{installDir}`, `{platform}`, and `{workspaceDir}`. Relative path-like values are resolved from the detected project root, and `~` is expanded.
 
@@ -439,6 +456,8 @@ pi
 ```
 
 Run `/reload` in Pi after editing the extension.
+
+`@earendil-works/pi-tui` and `typebox` are optional peer dependencies: Pi's extension loader provides them at runtime. Do not add them to `dependencies`, or npm installs private copies that bypass the loader and duplicate runtime modules.
 
 ## Release
 
