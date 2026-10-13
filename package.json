@@ -46,21 +46,27 @@
     ]
   },
   "dependencies": {
-    "@earendil-works/pi-tui": "^0.74.1",
-    "typebox": "^1.1.38",
     "vscode-jsonrpc": "^8.2.1",
     "vscode-languageserver-protocol": "^3.17.5",
     "vscode-uri": "^3.0.8"
   },
   "peerDependencies": {
     "@earendil-works/pi-ai": "*",
-    "@earendil-works/pi-coding-agent": "*"
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
   },
   "peerDependenciesMeta": {
     "@earendil-works/pi-ai": {
       "optional": true
     },
     "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@earendil-works/pi-tui": {
+      "optional": true
+    },
+    "typebox": {
       "optional": true
     }
   },
